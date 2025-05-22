@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鉅城娛樂 - 戰神塞特・豪華體驗</title>
+  <meta name="description" content="鉅城娛樂 - 頂級遊戲體驗，限時豪華專屬禮遇">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="鉅城娛樂 - 戰神塞特・豪華體驗" />
+  <meta property="og:description" content="限時豪華專屬禮遇，千元好禮立即到手！VIP專屬優惠，名額有限。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="images/戰神塞特.png" />
+
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://connect.facebook.net">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Facebook Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    // 初始 Pixel
+    fbq('init', '488931467548136');
+    fbq('init', '684627417243215');
+    fbq('init', '1867963090730089');
+
+
+    fbq('track', 'PageView');
+
+
+    fbq('track', 'ViewContent', {
+      content_name: '遊戲頁面',
+      content_category: '線上遊戲',
+      content_type: 'product'
+    });
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=488931467548136&ev=PageView&noscript=1" />
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=684627417243215&ev=PageView&noscript=1" />
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1867963090730089&ev=PageView&noscript=1" />
+  </noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <style>
+    /* CSS 變數定義 */
+    :root {
+      --primary-gold: #FFD700;
+      --dark-gold: #B8860B;
+      --light-gold: #FFDF7F;
+      --black: #000000;
+      --dark-gray: #1A1A1A;
+      --white: #FFFFFF;
+      --line-green: #06C755;
+      --accent-red: #FF4136;
+      --shadow-gold: rgba(255, 215, 0, 0.3);
+      --shadow-green: rgba(6, 199, 85, 0.4);
+    }
+
+    /* 基礎重置和設定 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* 容器和背景 */
+    .main-container {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #000000 0%, #1C1500 50%, #2A1F00 100%);
+    }
+
+    .bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.15;
+      background-image: radial-gradient(var(--primary-gold) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: float 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* 導航列 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar.hide {
+      transform: translateY(-100%);
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      height: 60px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    /* 主要內容區域 */
+    .hero-section {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 2rem 60px;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    /* 圖片區域 */
+    .image-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-frame {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 3px solid var(--primary-gold);
+      box-shadow: 0 0 30px var(--shadow-gold);
+      transition: all 0.5s ease;
+      max-width: 100%;
+    }
+
+    .image-frame:hover {
+      transform: scale(1.05) rotate(-2deg);
+      box-shadow: 0 0 50px var(--shadow-gold);
+    }
+
+    .character-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .image-frame:hover .character-image {
+      transform: scale(1.1);
+    }
+
+    /* 文字內容區域 */
+    .content-section {
+      padding: 2rem 0;
+    }
+
+    .main-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--primary-gold);
+      text-shadow:
+        0 2px 4px rgba(0,0,0,0.5),
+        0 0 8px rgba(255, 215, 0, 0.3);
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .sub-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .promo-text {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--light-gold);
+      margin-bottom: 1rem;
+    }
+
+    .promo-details {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 2.5rem;
+    }
+
+    /* 步驟說明 */
+    .steps-list {
+      margin-bottom: 3rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--primary-gold);
+      color: var(--black);
+      font-weight: bold;
+      border-radius: 50%;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* CTA 按鈕 */
+    .cta-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--line-green);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.5rem;
+      padding: 1.2rem 2rem;
+      border-radius: 50px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 25px var(--shadow-green);
+      transition: all 0.3s ease;
+      border: 2px solid var(--line-green);
+      min-height: 70px;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px var(--shadow-green);
+      background: #05b84d;
+    }
+
+    .cta-button:active {
+      transform: translateY(-1px);
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .line-icon {
+      margin-right: 0.8rem;
+      font-size: 1.8rem;
+    }
+
+    /* 頁腳 */
+    .footer {
+      background: rgba(0,0,0,0.9);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,215,0,0.2);
+    }
+
+    .footer-logo {
+      height: 40px;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+
+    .copyright {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 1024px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .main-title {
+        font-size: 3rem;
+      }
+
+      .sub-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 100px 1rem 40px;
+      }
+
+      .main-title {
+        font-size: 2.5rem;
+        text-align: center;
+      }
+
+      .sub-title {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      .content-section {
+        text-align: center;
+        padding: 1rem 0;
+      }
+
+      .cta-button {
+        font-size: 1.3rem;
+        padding: 1rem 1.5rem;
+      }
+
+      .navbar {
+        padding: 0.8rem 1rem;
+      }
+
+      .logo {
+        height: 50px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-title {
+        font-size: 2rem;
+      }
+
+      .sub-title {
+        font-size: 1.3rem;
+      }
+
+      .promo-text {
+        font-size: 1.2rem;
+      }
+
+      .promo-details {
+        font-size: 1rem;
+      }
+
+      .step-item {
+        font-size: 1rem;
+      }
+
+      .cta-button {
+        font-size: 1.2rem;
+        padding: 0.9rem 1.2rem;
+        min-height: 60px;
+      }
+
+      .line-icon {
+        font-size: 1.5rem;
+        margin-right: 0.6rem;
+      }
+    }
+
+    /* 載入動畫 */
+    .fade-in {
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 按鈕點擊效果 */
+    .click-effect {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .click-effect::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .click-effect.clicked::after {
+      width: 300px;
+      height: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-container">
+    <!-- 背景圖案 -->
+    <div class="bg-pattern"></div>
+
+    <!-- 導航列 -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-content">
+        <img src="images/logo.png" alt="鉅城娛樂" class="logo">
+      </div>
+    </nav>
+
+    <!-- 主要內容 -->
+    <main class="hero-section">
+      <div class="hero-container">
+        <!-- 圖片區域 -->
+        <div class="image-section fade-in">
+          <div class="image-frame">
+            <img src="images/戰神塞特.png" alt="戰神塞特" class="character-image">
+          </div>
+        </div>
+
+        <!-- 文字內容區域 -->
+        <div class="content-section fade-in">
+          <h1 class="main-title">戰神塞特 x 鉅城娛樂</h1>
+          <h2 class="sub-title">極致體驗・豪華盛宴</h2>
+
+          <p class="promo-text">🎉 限時豪華專屬禮遇，千元好禮立即到手！</p>
+          <p class="promo-details">VIP專屬優惠，名額有限，先到先得！立即行動，搶佔先機！</p>
+
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div>加入官方LINE - 專屬美女小助手服務</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div>完成註冊 - 暢享極致遊戲體驗</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div>立即領取 - 多重豪華好禮等您拿</div>
+            </div>
+          </div>
+
+          <div class="cta-wrapper">
+            <a href="https://lin.ee/WQfGz0J"
+               id="joinLineBtn"
+               class="cta-button click-effect"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-event="registration">
+              <i class="fab fa-line line-icon"></i>
+              立即加入官方LINE
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+    <footer class="footer">
+      <img src="images/logo.png" alt="鉅城娛樂" class="footer-logo">
+      <p class="copyright">© 2025 鉅城娛樂. All Rights Reserved. | 專業平台</p>
+    </footer>
+  </div>
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+      let lastScrollY = window.scrollY;
+      const navbar = document.getElementById('navbar');
+
+      function handleScroll() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > 100) {
+          if (currentScrollY > lastScrollY) {
+            navbar.classList.add('hide');
+          } else {
+            navbar.classList.remove('hide');
+          }
+        } else {
+          navbar.classList.remove('hide');
+        }
+
+        lastScrollY = currentScrollY;
+      }
+
+
+      let scrollTimer = null;
+      window.addEventListener('scroll', function() {
+        if (scrollTimer !== null) {
+          clearTimeout(scrollTimer);
+        }
+        scrollTimer = setTimeout(handleScroll, 10);
+      });
+
+      // 圖片懶載入
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.loading = 'lazy';
+      });
+
+
+      const ctaButton = document.getElementById('joinLineBtn');
+
+      if (ctaButton) {
+        ctaButton.addEventListener('click', function(e) {
+          console.log('CTA button clicked - tracking events...');
+
+
+          this.classList.add('clicked');
+          setTimeout(() => {
+            this.classList.remove('clicked');
+          }, 600);
+
+          // Facebook Pixel 事件追蹤
+          if (typeof fbq !== 'undefined') {
+            try {
+
+              fbq('track', 'CompleteRegistration', {
+                content_name: '戰神塞特遊戲註冊',
+                content_category: '線上遊戲',
+                content_type: 'signup',
+                value: 1000,
+                currency: 'TWD',
+                predicted_ltv: 5000,
+                source: 'landing_page'
+              });
+
+
+              fbq('track', 'Lead', {
+                content_name: 'LINE官方帳號加入',
+                content_category: '客戶開發',
+                content_type: 'lead_generation',
+                source: 'cta_button'
+              });
+
+
+              fbq('trackCustom', 'LineRegistration', {
+                game_name: '戰神塞特',
+                promotion_type: '新用戶專屬',
+                traffic_source: 'facebook_ads'
+              });
+
+              console.log('✅ Facebook Pixel events fired successfully');
+              console.log('- CompleteRegistration event');
+              console.log('- Lead event');
+              console.log('- Custom LineRegistration event');
+
+            } catch (error) {
+              console.error('❌ Facebook Pixel tracking error:', error);
+            }
+          } else {
+            console.warn('⚠️ Facebook Pixel (fbq) not found');
+          }
+
+
+          e.preventDefault();
+          setTimeout(() => {
+            window.open(ctaButton.href, '_blank', 'noopener,noreferrer');
+          }, 150);
+        });
+      }
+
+      // 追蹤用戶互動行為
+      let interactionStartTime = Date.now();
+
+      // 追蹤頁面停留時間
+      window.addEventListener('beforeunload', function() {
+        const timeSpent = Math.round((Date.now() - interactionStartTime) / 1000);
+
+        if (typeof fbq !== 'undefined' && timeSpent > 10) {
+          fbq('trackCustom', 'PageEngagement', {
+            time_spent: timeSpent,
+            content_name: '戰神塞特遊戲頁面',
+            engagement_level: timeSpent > 30 ? 'high' : 'medium'
+          });
+        }
+      });
+
+      // 追蹤滾動深度
+      let maxScrollDepth = 0;
+      window.addEventListener('scroll', function() {
+        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+
+        if (scrollDepth > maxScrollDepth) {
+          maxScrollDepth = scrollDepth;
+
+          // 追蹤關鍵滾動里程碑
+          if (maxScrollDepth >= 25 && maxScrollDepth < 30) {
+            fbq && fbq('trackCustom', 'ScrollDepth25');
+          } else if (maxScrollDepth >= 50 && maxScrollDepth < 55) {
+            fbq && fbq('trackCustom', 'ScrollDepth50');
+          } else if (maxScrollDepth >= 75 && maxScrollDepth < 80) {
+            fbq && fbq('trackCustom', 'ScrollDepth75');
+          }
+        }
+      });
+
+      console.log('🚀 Page initialization complete');
+      console.log('📊 Facebook Pixel tracking ready');
+      console.log('🎮 戰神塞特 landing page loaded');
+    });
+
+    // 全域錯誤處理
+    window.addEventListener('error', function(e) {
+      console.error('Page error:', e.error);
+    });
+
+    // Facebook Pixel 載入狀態檢查
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        if (typeof fbq !== 'undefined') {
+          console.log('✅ Facebook Pixel loaded successfully');
+        } else {
+          console.warn('⚠️ Facebook Pixel failed to load');
+        }
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
