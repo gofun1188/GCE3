@@ -276,6 +276,7 @@
       transition: all 0.3s ease;
       border: 2px solid var(--line-green);
       min-height: 70px;
+      cursor: pointer;
     }
     
     .cta-button:hover {
@@ -286,6 +287,12 @@
     
     .cta-button:active {
       transform: translateY(-1px);
+    }
+    
+    .cta-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
     }
     
     .cta-button::before {
@@ -502,8 +509,7 @@
                id="joinLineBtn" 
                class="cta-button click-effect"
                type="button"
-               data-event="registration"
-               onclick="handleCTAClick()">
+               data-event="registration">
               <i class="fab fa-line line-icon"></i>
               立即加入官方LINE
             </button>
@@ -520,47 +526,279 @@
   </div>
 
   <script>
-    // Facebook Pixel 事件追踪函数
+    // 全域變數
+    let pixelReady = false;
+    let userInteractions = {
+      pageLoadTime: Date.now(),
+      maxScrollDepth: 0,
+      buttonVisible: false,
+      buttonClicked: false
+    };
+
+    // Facebook Pixel 狀態檢查
+    function checkPixelStatus() {
+      return new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 20;
+        
+        function check() {
+          attempts++;
+          
+          if (typeof fbq !== 'undefined' && fbq.loaded) {
+            pixelReady = true;
+            console.log('✅ Facebook Pixel loaded successfully');
+            resolve(true);
+          } else if (attempts < maxAttempts) {
+            setTimeout(check, 250);
+          } else {
+            console.warn('⚠️ Facebook Pixel failed to load');
+            resolve(false);
+          }
+        }
+        
+        check();
+      });
+    }
+
+    // 安全的 Facebook Pixel 事件發送
+    function sendPixelEvent(eventName, parameters = {}, callback = null) {
+      if (!pixelReady || typeof fbq === 'undefined') {
+        console.warn(`❌ Cannot send ${eventName} - Pixel not ready`);
+        if (callback) callback();
+        return;
+      }
+
+      try {
+        console.log(`📊 Sending Facebook Pixel event: ${eventName}`, parameters);
+        
+        if (eventName.startsWith('track')) {
+          fbq(eventName, parameters);
+        } else {
+          fbq('trackCustom', eventName, parameters);
+        }
+        
+        if (callback) {
+          setTimeout(callback, 100);
+        }
+        
+      } catch (error) {
+        console.error(`❌ Error sending ${eventName}:`, error);
+        if (callback) callback();
+      }
+    }
+
+    // 主要 CTA 按鈕點擊處理
     function handleCTAClick() {
-      console.log('CTA button clicked - tracking events...');
+      if (userInteractions.buttonClicked) {
+        console.log('Button already clicked, preventing double-click');
+        return;
+      }
       
-      // Facebook Pixel 事件追踪
-      if (typeof fbq !== 'undefined') {
-        try {
-          // 主要轉換事件 - 完成註冊
-          fbq('track', 'CompleteRegistration', {
+      userInteractions.buttonClicked = true;
+      const button = document.getElementById('joinLineBtn');
+      
+      if (!button) return;
+      
+      // 禁用按鈕防止重複點擊
+      button.disabled = true;
+      button.style.opacity = '0.8';
+      
+      console.log('🎯 CTA Button clicked - Starting event tracking...');
+      
+      // 事件發送隊列
+      const events = [
+        {
+          name: 'Lead',
+          params: {
+            content_name: 'LINE官方帳號加入',
+            content_category: '客戶開發',
+            source: '戰神塞特落地頁'
+          }
+        },
+        {
+          name: 'CompleteRegistration',
+          params: {
             content_name: '戰神塞特遊戲註冊',
             content_category: '線上遊戲',
             content_type: 'signup',
             value: 1000,
             currency: 'TWD'
-          });
-          
-          // 潛在客戶事件
-          fbq('track', 'Lead', {
-            content_name: 'LINE官方帳號加入',
-            content_category: '客戶開發'
-          });
-          
-          console.log('✅ Facebook Pixel events fired successfully');
-          
-        } catch (error) {
-          console.error('❌ Facebook Pixel tracking error:', error);
+          }
+        },
+        {
+          name: 'LineButtonClick',
+          params: {
+            content_name: '戰神塞特LINE按鈕',
+            button_text: '立即加入官方LINE',
+            page_location: window.location.href
+          }
         }
+      ];
+      
+      // 發送所有事件
+      let eventsSent = 0;
+      const totalEvents = events.length;
+      
+      function sendNextEvent() {
+        if (eventsSent >= totalEvents) {
+          // 所有事件發送完成，執行跳轉
+          setTimeout(() => {
+            console.log('🚀 All events sent, redirecting to LINE...');
+            window.open('https://lin.ee/WQfGz0J', '_blank');
+            
+            // 恢復按鈕狀態
+            setTimeout(() => {
+              button.disabled = false;
+              button.style.opacity = '1';
+              userInteractions.buttonClicked = false;
+            }, 2000);
+          }, 200);
+          return;
+        }
+        
+        const event = events[eventsSent];
+        sendPixelEvent(event.name, event.params, () => {
+          eventsSent++;
+          sendNextEvent();
+        });
       }
       
-      // 延遲後跳轉到LINE
-      setTimeout(function() {
-        window.open('https://lin.ee/WQfGz0J', '_blank');
-      }, 100);
-    }
-    
-    // DOM 载入完成后执行
-    document.addEventListener('DOMContentLoaded', function() {
+      // 開始發送事件
+      sendNextEvent();
       
-      // 導航列滾動隱藏效果
+      // 備用超時機制 - 確保即使事件失敗也會跳轉
+      setTimeout(() => {
+        if (button.disabled) {
+          console.log('⏰ Timeout reached, forcing redirect...');
+          window.open('https://lin.ee/WQfGz0J', '_blank');
+          button.disabled = false;
+          button.style.opacity = '1';
+          userInteractions.buttonClicked = false;
+        }
+      }, 3000);
+    }
+
+    // 初始化函數
+    async function initializePixelTracking() {
+      console.log('🚀 Initializing Facebook Pixel tracking...');
+      
+      // 等待 Pixel 載入
+      await checkPixelStatus();
+      
+      if (pixelReady) {
+        // 發送頁面載入事件
+        sendPixelEvent('PageLoaded', {
+          page_name: '戰神塞特遊戲頁面',
+          content_category: '遊戲推廣',
+          user_agent: navigator.userAgent,
+          referrer: document.referrer || 'direct'
+        });
+        
+        // 設置按鈕可見性追踪
+        setupButtonVisibilityTracking();
+        
+        // 設置滾動深度追踪
+        setupScrollTracking();
+        
+        console.log('✅ Pixel tracking initialized successfully');
+      }
+    }
+
+    // 按鈕可見性追踪
+    function setupButtonVisibilityTracking() {
+      const ctaButton = document.getElementById('joinLineBtn');
+      if (!ctaButton) return;
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !userInteractions.buttonVisible) {
+            userInteractions.buttonVisible = true;
+            
+            sendPixelEvent('ViewContent', {
+              content_name: '戰神塞特CTA按鈕',
+              content_type: 'button',
+              content_category: '遊戲註冊'
+            });
+            
+            // 只追踪一次，所以移除觀察
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { 
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      observer.observe(ctaButton);
+    }
+
+    // 滾動深度追踪
+    function setupScrollTracking() {
+      let scrollTimer;
+      
+      window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          const scrollPercent = Math.round(
+            (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+          );
+          
+          if (scrollPercent > userInteractions.maxScrollDepth) {
+            userInteractions.maxScrollDepth = scrollPercent;
+            
+            // 追踪重要的滾動里程碑
+            if (scrollPercent >= 25 && scrollPercent < 30) {
+              sendPixelEvent('ScrollDepth25', { scroll_depth: scrollPercent });
+            } else if (scrollPercent >= 50 && scrollPercent < 55) {
+              sendPixelEvent('ScrollDepth50', { scroll_depth: scrollPercent });
+            } else if (scrollPercent >= 75 && scrollPercent < 80) {
+              sendPixelEvent('ScrollDepth75', { scroll_depth: scrollPercent });
+            } else if (scrollPercent >= 90 && scrollPercent < 95) {
+              sendPixelEvent('ScrollDepth90', { scroll_depth: scrollPercent });
+            }
+          }
+        }, 250);
+      });
+    }
+
+    // DOM 載入完成後執行
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📄 DOM Content Loaded');
+      
+      // 初始化 Pixel 追踪
+      initializePixelTracking();
+      
+      // 設置按鈕點擊事件
+      const joinLineBtn = document.getElementById('joinLineBtn');
+      if (joinLineBtn) {
+        joinLineBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // 添加視覺效果
+          this.classList.add('clicked');
+          setTimeout(() => {
+            this.classList.remove('clicked');
+          }, 600);
+          
+          // 執行事件追踪和跳轉
+          handleCTAClick();
+        });
+      }
+      
+      // 導航列滾動效果
+      setupNavbarScrollEffect();
+      
+      // 圖片懶載入
+      setupImageLazyLoading();
+      
+      console.log('✅ Page initialization complete');
+    });
+
+    // 導航列滾動效果
+    function setupNavbarScrollEffect() {
       let lastScrollY = window.scrollY;
       const navbar = document.getElementById('navbar');
+      let scrollTimer;
       
       function handleScroll() {
         const currentScrollY = window.scrollY;
@@ -578,86 +816,64 @@
         lastScrollY = currentScrollY;
       }
       
-      // 節流處理滾動事件
-      let scrollTimer = null;
       window.addEventListener('scroll', function() {
-        if (scrollTimer !== null) {
-          clearTimeout(scrollTimer);
-        }
+        clearTimeout(scrollTimer);
         scrollTimer = setTimeout(handleScroll, 10);
       });
-      
-      // 圖片懶載入
+    }
+
+    // 圖片懶載入
+    function setupImageLazyLoading() {
       const images = document.querySelectorAll('img');
       images.forEach(img => {
         img.loading = 'lazy';
       });
-      
-      // Facebook Pixel 事件追蹤 - 主要功能
-      const ctaButton = document.getElementById('joinLineBtn');
-      
-      if (ctaButton) {
-        ctaButton.addEventListener('click', function(e) {
-          // 添加視覺回饋效果
-          this.classList.add('clicked');
-          setTimeout(() => {
-            this.classList.remove('clicked');
-          }, 600);
-        });
-      }
-      
-      // 追蹤用戶互動行為
-      let interactionStartTime = Date.now();
-      
-      // 追蹤頁面停留時間
-      window.addEventListener('beforeunload', function() {
-        const timeSpent = Math.round((Date.now() - interactionStartTime) / 1000);
+    }
+
+    // 頁面離開前的事件追踪
+    window.addEventListener('beforeunload', function() {
+      if (pixelReady) {
+        const timeSpent = Math.round((Date.now() - userInteractions.pageLoadTime) / 1000);
         
-        if (typeof fbq !== 'undefined' && timeSpent > 10) {
-          fbq('trackCustom', 'PageEngagement', {
+        if (timeSpent > 5) {
+          sendPixelEvent('PageEngagement', {
             time_spent: timeSpent,
-            content_name: '戰神塞特遊戲頁面',
-            engagement_level: timeSpent > 30 ? 'high' : 'medium'
+            max_scroll_depth: userInteractions.maxScrollDepth,
+            button_clicked: userInteractions.buttonClicked,
+            engagement_level: timeSpent > 30 ? 'high' : timeSpent > 10 ? 'medium' : 'low'
           });
         }
-      });
-      
-      // 追蹤滾動深度
-      let maxScrollDepth = 0;
-      window.addEventListener('scroll', function() {
-        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        
-        if (scrollDepth > maxScrollDepth) {
-          maxScrollDepth = scrollDepth;
-          
-          // 追蹤關鍵滾動里程碑
-          if (maxScrollDepth >= 25 && maxScrollDepth < 30) {
-            fbq && fbq('trackCustom', 'ScrollDepth25');
-          } else if (maxScrollDepth >= 50 && maxScrollDepth < 55) {
-            fbq && fbq('trackCustom', 'ScrollDepth50');
-          } else if (maxScrollDepth >= 75 && maxScrollDepth < 80) {
-            fbq && fbq('trackCustom', 'ScrollDepth75');
-          }
-        }
-      });
-      
-      console.log('🚀 Page initialization complete');
-      console.log('📊 Facebook Pixel tracking ready');
-      console.log('🎮 戰神塞特 landing page loaded');
+      }
     });
-    
+
     // 全域錯誤處理
     window.addEventListener('error', function(e) {
-      console.error('Page error:', e.error);
+      console.error('💥 Page error:', e.error);
+      
+      if (pixelReady) {
+        sendPixelEvent('PageError', {
+          error_message: e.message || 'Unknown error',
+          error_source: e.filename || 'Unknown source',
+          error_line: e.lineno || 0
+        });
+      }
     });
-    
-    // Facebook Pixel 載入狀態檢查
+
+    // 最終檢查 - 確保 Pixel 正常工作
     window.addEventListener('load', function() {
-      setTimeout(function() {
-        if (typeof fbq !== 'undefined') {
-          console.log('✅ Facebook Pixel loaded successfully');
+      setTimeout(() => {
+        if (pixelReady) {
+          console.log('🎉 All systems ready - Facebook Pixel tracking active');
+          
+          // 發送測試事件確認一切正常
+          sendPixelEvent('SystemReady', {
+            status: 'active',
+            timestamp: Date.now(),
+            user_agent: navigator.userAgent.substring(0, 100)
+          });
+          
         } else {
-          console.warn('⚠️ Facebook Pixel failed to load');
+          console.error('❌ Facebook Pixel failed to initialize properly');
         }
       }, 2000);
     });
